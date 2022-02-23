@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_restaurant_detail">
         <argument
             android:name="id"
-            app:argType="int" />
+            app:argType="integer" />
         <argument
             android:name="restaurant_name"
             app:argType="string" />

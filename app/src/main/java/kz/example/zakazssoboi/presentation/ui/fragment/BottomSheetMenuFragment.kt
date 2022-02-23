@@ -33,13 +33,13 @@ class BottomSheetMenuFragment(
     }
 
     private fun init() = with(binding) {
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, itemsMenu)
-        menuLV.adapter = adapter
-        menuLV.onItemClickListener =
-            AdapterView.OnItemClickListener { _, _, position, _ ->
-                onClickMenuItem(position)
-                dismiss()
-            }
+//        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, itemsMenu)
+//        menuLV.adapter = adapter
+//        menuLV.onItemClickListener =
+//            AdapterView.OnItemClickListener { _, _, position, _ ->
+//                onClickMenuItem(position)
+//                dismiss()
+//            }
     }
 
     override fun onDestroyView() {

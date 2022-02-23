@@ -15,7 +15,7 @@ class RestaurantItemViewHolder(
         textViewRestaurantName.text = item.name
         textViewRestaurantAddress.text = item.address
         Picasso.get().load(item.image).placeholder(R.drawable.back)
-            .error(R.drawable.back).into(imageViewRestaurantIcon)
+            .error(R.drawable.back).into(imageViewRestaurant)
         itemView.startAnimation(
             AnimationUtils.loadAnimation(
                 root.context,

@@ -4,17 +4,17 @@ import android.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kz.example.zakazssoboi.R
-import kz.example.zakazssoboi.databinding.ItemCateogryBinding
+import kz.example.zakazssoboi.databinding.ItemCategoryBinding
 import kz.example.zakazssoboi.domain.entity.Category
 
-class CategoryViewHolder(private val binding: ItemCateogryBinding) :
+class CategoryViewHolder(private val binding: ItemCategoryBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(category: Category) {
         binding.name.text = category.name
     }
 
-    fun defaultCardStroke(ownBinding: ItemCateogryBinding = binding) {
+    fun defaultCardStroke(ownBinding: ItemCategoryBinding = binding) {
         ownBinding.name.setTextColor(
             ContextCompat.getColor(
                 binding.root.context,

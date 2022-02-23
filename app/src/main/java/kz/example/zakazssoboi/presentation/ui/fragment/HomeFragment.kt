@@ -33,10 +33,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         restaurantListAdapter = RestaurantsListAdapter {
             onNoteClick(it)
         }
-        binding.recyclerViewEstablishments.adapter = restaurantListAdapter
+        binding.recyclerViewRestaurants.adapter = restaurantListAdapter
 
         if (restaurantListAdapter.currentList.isEmpty()) {
-            binding.progressBar.visibility = View.VISIBLE
+            binding.progressBarHome.visibility = View.VISIBLE
         }
     }
 

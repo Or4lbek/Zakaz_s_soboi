@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kz.example.zakazssoboi.common.MarginItemDecoration
-import kz.example.zakazssoboi.databinding.ItemParentMenuBinding
+import kz.example.zakazssoboi.databinding.ItemCategoryProductsBinding
 import kz.example.zakazssoboi.domain.entity.CategoryProduct
 import kz.example.zakazssoboi.presentation.ui.diff_callback.CategoryProductDiffCallback
 
@@ -16,10 +16,10 @@ class ParentMenuAdapter(private val listener: ChildMenuAdapter.ChildMenuAdapterL
         CategoryProductDiffCallback()
     ) {
 
-    inner class CategoryContainerViewHolder(private val binding: ItemParentMenuBinding) :
+    inner class CategoryContainerViewHolder(private val binding: ItemCategoryProductsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.mealRv.addItemDecoration(
+            binding.recyclerViewProducts.addItemDecoration(
                 MarginItemDecoration(
                     binding.root.context,
                     LinearLayoutManager.VERTICAL,
@@ -28,10 +28,10 @@ class ParentMenuAdapter(private val listener: ChildMenuAdapter.ChildMenuAdapterL
             )
         }
 
-        fun bind(item: CategoryProduct) {
-            binding.category.text = item.category
-            binding.mealRv.isNestedScrollingEnabled = false
-            binding.mealRv.adapter = ChildMenuAdapter(listener).apply {
+        fun bind(item: CategoryProduct) = with(binding) {
+            textViewCategoryName.text = item.category
+            recyclerViewProducts.isNestedScrollingEnabled = false
+            recyclerViewProducts.adapter = ChildMenuAdapter(listener).apply {
                 submitList(item.meals)
             }
         }
@@ -39,7 +39,7 @@ class ParentMenuAdapter(private val listener: ChildMenuAdapter.ChildMenuAdapterL
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryContainerViewHolder {
         val binding =
-            ItemParentMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemCategoryProductsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CategoryContainerViewHolder(binding)
     }
 

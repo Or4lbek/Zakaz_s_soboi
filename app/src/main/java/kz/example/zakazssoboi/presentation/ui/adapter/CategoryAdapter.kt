@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import kz.example.zakazssoboi.databinding.ItemCateogryBinding
+import kz.example.zakazssoboi.databinding.ItemCategoryBinding
 import kz.example.zakazssoboi.domain.entity.Category
 import kz.example.zakazssoboi.presentation.ui.diff_callback.CategoryDiffCallback
 import kz.example.zakazssoboi.presentation.ui.view_holder.CategoryViewHolder
@@ -17,7 +17,7 @@ class CategoryAdapter(private val onClickCategory: (Int) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding =
-            ItemCateogryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CategoryViewHolder(binding)
     }
 
