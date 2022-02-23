@@ -6,4 +6,10 @@ data class Product(
     val description: String,
     val image: String,
     val price: Int,
-)
+    var counter: Int = 0
+) {
+    fun getPriceAsString(): String {
+        return "$price тг"
+    }
+}
+
