@@ -25,5 +25,13 @@
         <argument
             android:name="restaurant_name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_restaurantDetailFragment_to_basketFragment"
+            app:destination="@id/basketFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/basketFragment"
+        android:name="kz.example.zakazssoboi.presentation.ui.fragment.BasketFragment"
+        android:label="@String/basket"
+        tools:layout="@layout/fragment_basket" />
 </navigation>

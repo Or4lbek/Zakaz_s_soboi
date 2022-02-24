@@ -38,10 +38,32 @@
             tools:listitem="@layout/item_category" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_menu"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        tools:listitem="@layout/item_category_products" />
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            tools:listitem="@layout/item_category_products" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_basket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:padding="10dp"
+            android:text="@string/basket"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/blue"
+            app:cornerRadius="10dp" />
+
+    </LinearLayout>
+
+
 </LinearLayout>

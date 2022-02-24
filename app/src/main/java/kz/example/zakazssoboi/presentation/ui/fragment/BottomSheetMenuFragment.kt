@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kz.example.zakazssoboi.R
+import kz.example.zakazssoboi.common.MarginItemDecoration
 import kz.example.zakazssoboi.databinding.FragmentBottomSheetMenuBinding
+import kz.example.zakazssoboi.domain.entity.CategoryMenu
+import kz.example.zakazssoboi.presentation.ui.adapter.CategoryMenuAdapter
 
 class BottomSheetMenuFragment(
     private val onClickMenuItem: (Int) -> Unit,
-    private val itemsMenu: ArrayList<String>
+    private val itemsMenu: ArrayList<CategoryMenu>
 ) : BottomSheetDialogFragment() {
 
     private var _binding: FragmentBottomSheetMenuBinding? = null
@@ -33,14 +35,23 @@ class BottomSheetMenuFragment(
     }
 
     private fun init() = with(binding) {
-//        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, itemsMenu)
-//        menuLV.adapter = adapter
-//        menuLV.onItemClickListener =
-//            AdapterView.OnItemClickListener { _, _, position, _ ->
-//                onClickMenuItem(position)
-//                dismiss()
-//            }
+        val adapter = CategoryMenuAdapter {
+            onClickMenuItem(it)
+            dismiss()
+        }
+        adapter.submitList(itemsMenu)
+        recyclerViewCategory.apply {
+            this.adapter = adapter
+            addItemDecoration(
+                MarginItemDecoration(
+                    binding.root.context,
+                    LinearLayoutManager.VERTICAL,
+                    3
+                )
+            )
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

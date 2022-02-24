@@ -61,7 +61,7 @@ class ChildMenuAdapter(private val listener: ChildMenuAdapterListener) :
     }
 
     interface ChildMenuAdapterListener {
-        fun onClickPlus(meal: Product)
-        fun onClickMinus(meal: Product)
+        fun onClickPlus(product: Product)
+        fun onClickMinus(product: Product)
     }
 }

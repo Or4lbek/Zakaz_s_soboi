@@ -41,7 +41,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initViewModel() {
-
+        binding.progressBarHome.visibility = View.GONE
+        restaurantListAdapter.submitList(viewModel.restaurantList)
     }
 
     private fun onNoteClick(restaurant: Restaurant) {

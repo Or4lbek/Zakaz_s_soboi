@@ -32,7 +32,7 @@ class ParentMenuAdapter(private val listener: ChildMenuAdapter.ChildMenuAdapterL
             textViewCategoryName.text = item.category
             recyclerViewProducts.isNestedScrollingEnabled = false
             recyclerViewProducts.adapter = ChildMenuAdapter(listener).apply {
-                submitList(item.meals)
+                submitList(item.products)
             }
         }
     }
