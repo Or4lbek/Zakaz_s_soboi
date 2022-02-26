@@ -1,6 +1,7 @@
 package kz.example.zakazssoboi.presentation.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +25,8 @@ class ChildMenuAdapter(private val listener: ChildMenuAdapterListener) :
                         listener.onClickMinus(
                             currentList[absoluteAdapterPosition]
                         )
+                        hideMinusButton()
                     }
-
                 }
                 buttonPlus.setOnClickListener {
                     textViewProductCount.text =
@@ -33,7 +34,14 @@ class ChildMenuAdapter(private val listener: ChildMenuAdapterListener) :
                     listener.onClickPlus(
                         currentList[absoluteAdapterPosition]
                     )
+                    cartContainer.visibility = View.VISIBLE
                 }
+            }
+        }
+
+        private fun hideMinusButton() = with(binding) {
+            if (textViewProductCount.text == "0") {
+                cartContainer.visibility = View.GONE
             }
         }
 

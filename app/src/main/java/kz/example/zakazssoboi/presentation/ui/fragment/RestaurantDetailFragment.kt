@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,6 @@ import kz.example.zakazssoboi.R
 import kz.example.zakazssoboi.common.Constants.BOTTOM_SHEET_FRAGMENT
 import kz.example.zakazssoboi.databinding.FragmentRestaurantDetailBinding
 import kz.example.zakazssoboi.domain.entity.Category
-import kz.example.zakazssoboi.domain.entity.CategoryMenu
 import kz.example.zakazssoboi.domain.entity.Product
 import kz.example.zakazssoboi.presentation.ui.adapter.CategoryAdapter
 import kz.example.zakazssoboi.presentation.ui.adapter.ChildMenuAdapter
@@ -23,13 +23,14 @@ import kz.example.zakazssoboi.presentation.view_model.RestaurantDetailViewModel
 
 class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
     ChildMenuAdapter.ChildMenuAdapterListener {
-    private lateinit var viewModel: RestaurantDetailViewModel
+
     private var _binding: FragmentRestaurantDetailBinding? = null
     private val binding get() = _binding!!
-    private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var menuLayoutManager: LinearLayoutManager
     private val parentMenuAdapter: ParentMenuAdapter = ParentMenuAdapter(this)
 
+    private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var menuLayoutManager: LinearLayoutManager
+    private lateinit var viewModel: RestaurantDetailViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,6 +45,8 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
     private fun init() {
         binding.buttonBurger.setOnClickListener { onClickBtnBurger() }
         binding.buttonBasket.setOnClickListener { onClickBtnBasket() }
+        val args: RestaurantDetailFragmentArgs by navArgs()
+        val restaurantId = args.id
     }
 
     private fun initViewPager() {
@@ -90,21 +93,13 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
     private fun onClickBtnBurger() {
         val bottomSheetMenuFragment = BottomSheetMenuFragment(
             { onClickMenuItem(it) },
-            fromCategoryToList()
+            categoryAdapter.currentList
         )
         bottomSheetMenuFragment.show(parentFragmentManager, BOTTOM_SHEET_FRAGMENT)
     }
 
     private fun onClickMenuItem(position: Int) {
         onClickCategory(position)
-    }
-
-    private fun fromCategoryToList(): ArrayList<CategoryMenu> {
-        val itemsMenu: ArrayList<CategoryMenu> = ArrayList()
-        categoryAdapter.currentList.map { categoryProduct ->
-            itemsMenu.add(CategoryMenu(1, categoryProduct.name, 1))
-        }
-        return itemsMenu
     }
 
     private fun onClickBtnBasket() {
@@ -146,23 +141,22 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
         })
     }
 
-    override fun onClickPlus(product: Product) {
+    override fun onClickPlus(product: Product) = with(binding) {
         viewModel.totalPrice += product.price
-        binding.buttonBasket.apply {
-            if (viewModel.totalPrice > 0) {
-                visibility = View.VISIBLE
-            }
-            text = viewModel.totalPrice.toString()
+
+        if (viewModel.totalPrice > 0) {
+
+            buttonBasket.visibility = View.VISIBLE
+            buttonBasket.text = viewModel.totalPrice.toString()
         }
     }
 
-    override fun onClickMinus(product: Product) {
+    override fun onClickMinus(product: Product) = with(binding) {
         viewModel.totalPrice -= product.price
-        binding.buttonBasket.apply {
-            if (viewModel.totalPrice <= 0) {
-                visibility = View.GONE
-            }
-            text = viewModel.totalPrice.toString()
+
+        if (viewModel.totalPrice <= 0) {
+            buttonBasket.visibility = View.GONE
+            buttonBasket.text = viewModel.totalPrice.toString()
         }
     }
 

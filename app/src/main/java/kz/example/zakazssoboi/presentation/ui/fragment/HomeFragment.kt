@@ -17,7 +17,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
 
     private lateinit var restaurantListAdapter: RestaurantsListAdapter
-
     private lateinit var viewModel: RestaurantListViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

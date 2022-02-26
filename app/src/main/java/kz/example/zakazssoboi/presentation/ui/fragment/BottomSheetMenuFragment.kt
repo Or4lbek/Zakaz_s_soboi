@@ -9,12 +9,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kz.example.zakazssoboi.R
 import kz.example.zakazssoboi.common.MarginItemDecoration
 import kz.example.zakazssoboi.databinding.FragmentBottomSheetMenuBinding
-import kz.example.zakazssoboi.domain.entity.CategoryMenu
+import kz.example.zakazssoboi.domain.entity.Category
 import kz.example.zakazssoboi.presentation.ui.adapter.CategoryMenuAdapter
 
 class BottomSheetMenuFragment(
     private val onClickMenuItem: (Int) -> Unit,
-    private val itemsMenu: ArrayList<CategoryMenu>
+    private val itemsMenu: List<Category>
 ) : BottomSheetDialogFragment() {
 
     private var _binding: FragmentBottomSheetMenuBinding? = null

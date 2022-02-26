@@ -65,6 +65,7 @@
             <LinearLayout
                 android:id="@+id/cart_container"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content">
 
                 <View

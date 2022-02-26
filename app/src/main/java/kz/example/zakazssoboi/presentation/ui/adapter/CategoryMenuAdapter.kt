@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import kz.example.zakazssoboi.databinding.ItemCategoryCountBinding
-import kz.example.zakazssoboi.domain.entity.CategoryMenu
-import kz.example.zakazssoboi.presentation.ui.diff_callback.CategoryMenuDiffCallback
+import kz.example.zakazssoboi.domain.entity.Category
+import kz.example.zakazssoboi.presentation.ui.diff_callback.CategoryDiffCallback
 import kz.example.zakazssoboi.presentation.ui.view_holder.CategoryMenuViewHolder
 
 class CategoryMenuAdapter(private val onClickCategoryMenu: (Int) -> Unit) :
-    ListAdapter<CategoryMenu, CategoryMenuViewHolder>(CategoryMenuDiffCallback()) {
-
+    ListAdapter<Category, CategoryMenuViewHolder>(CategoryDiffCallback()) {
 
     override fun onBindViewHolder(holder: CategoryMenuViewHolder, position: Int) {
         val item = currentList[position]

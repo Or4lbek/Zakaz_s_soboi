@@ -19,7 +19,7 @@ class RestaurantListViewModel : ViewModel() {
         restaurantList.add(
             Restaurant(
                 2,
-                "ул. Кабанбай батыра 83",
+                "Mamma mia",
                 "ул. Бухар жырау, 66, уг. ул. Ауэзова",
                 "https://restolife.kz/upload/information_system_6/2/1/4/item_21447/information_items_property_24075.jpg"
             )
@@ -59,7 +59,7 @@ class RestaurantListViewModel : ViewModel() {
         restaurantList.add(
             Restaurant(
                 7,
-                "ул. Кабанбай батыра 83",
+                "Mamma miad",
                 "ул. Бухар жырау, 66, уг. ул. Ауэзова",
                 "https://restolife.kz/upload/information_system_6/2/1/4/item_21447/information_items_property_24075.jpg"
             )
