@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kz.example.zakazssoboi.databinding.ItemCategoryCountBinding
 import kz.example.zakazssoboi.domain.entity.Category
 
-class CategoryMenuViewHolder(private val binding: ItemCategoryCountBinding) :
+class CategoryMenuViewHolder(val binding: ItemCategoryCountBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(category: Category) = with(binding) {

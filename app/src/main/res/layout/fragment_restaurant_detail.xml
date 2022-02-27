@@ -31,12 +31,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp" />
 
+                <TextView
+                    android:id="@+id/text_view_restaurant_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:fontFamily="@font/roboto"
+                    tools:text="ул. Панфилова 109" />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:clipToPadding="false"
             android:gravity="center">
 
             <ImageButton
@@ -53,7 +63,8 @@
                 android:id="@+id/recycler_view_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginStart="16dp"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -62,45 +73,71 @@
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="50dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_product" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_menu"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/button_basket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="10dp"
+        android:backgroundTint="@color/blue"
+        android:minHeight="50dp"
+        android:padding="10dp"
+        android:visibility="gone"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            android:paddingTop="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/item_product" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_basket"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:height="50dp"
-            android:padding="10dp"
-            android:text="@string/basket"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/blue"
+            <TextView
+                android:id="@+id/text_view_productList_count"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:textColor="@color/color_divider"
+                tools:text="1шт" />
 
-            app:cornerRadius="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recycler_view_menu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/text_view_basket"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:text="@string/basket"
+                android:textColor="@color/color_divider"
+                android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/text_view_productList_total_price"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:textColor="@color/color_divider"
+                tools:text="1 600 ₸" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

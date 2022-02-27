@@ -3,6 +3,7 @@ package kz.example.zakazssoboi.presentation.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -46,9 +47,11 @@ class ChildMenuAdapter(private val listener: ChildMenuAdapterListener) :
         }
 
         fun bind(item: Product) = with(binding) {
+            cartContainer.isVisible = item.counter > 0
             textViewProductCount.text = item.counter.toString()
             textViewProductName.text = item.name
             textViewProductPrice.text = item.getPriceAsString()
+            textViewProductDescription.text = item.description
             Picasso.get().load(item.image).placeholder(R.drawable.back)
                 .error(R.drawable.back).into(imageViewProduct)
         }

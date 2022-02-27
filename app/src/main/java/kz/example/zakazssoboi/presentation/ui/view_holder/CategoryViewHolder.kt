@@ -11,11 +11,11 @@ class CategoryViewHolder(private val binding: ItemCategoryBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(category: Category) {
-        binding.name.text = category.name
+        binding.textViewCategoryName.text = category.name
     }
 
     fun defaultCardStroke(ownBinding: ItemCategoryBinding = binding) {
-        ownBinding.name.setTextColor(
+        ownBinding.textViewCategoryName.setTextColor(
             ContextCompat.getColor(
                 binding.root.context,
                 R.color.graySecond

@@ -36,4 +36,6 @@
     <string name="menu">Меню</string>
     <string name="image_of_establishment_content">image of establishment</string>
     <string name="image_of_restaurant_view_pager_cont">image of restaurant view pager</string>
+    <string name="product_image_con">product image</string>
+    <string name="zero">0</string>
 </resources>

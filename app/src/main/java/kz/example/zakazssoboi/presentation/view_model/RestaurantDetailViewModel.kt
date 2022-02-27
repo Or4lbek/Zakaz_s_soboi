@@ -1,15 +1,19 @@
 package kz.example.zakazssoboi.presentation.view_model
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import kz.example.zakazssoboi.common.Constants.PIZZA_URL
 import kz.example.zakazssoboi.domain.entity.CategoryProduct
 import kz.example.zakazssoboi.domain.entity.Product
 
-class RestaurantDetailViewModel : ViewModel() {
+class RestaurantDetailViewModel() : ViewModel() {
 
     var viewPagerImages: ArrayList<String> = ArrayList()
     val liveData: MutableLiveData<List<CategoryProduct>> = MutableLiveData()
+    val selectedProducts: ArrayList<Product> = ArrayList()
+    val restaurantAddress = "ул. Панфилова 109"
+    val restaurantName = "Mamma mia"
     var totalPrice = 0
 
     init {
@@ -23,6 +27,28 @@ class RestaurantDetailViewModel : ViewModel() {
             add("https://media-cdn.tripadvisor.com/media/photo-s/13/c5/15/2f/interiors.jpg")
         }
 
+    }
+
+    fun addProduct(product: Product) {
+        totalPrice += product.price
+        if (!selectedProducts.contains(product))
+            selectedProducts.add(product)
+        product.counter++
+    }
+
+    fun removeProduct(product: Product) {
+        totalPrice -= product.price
+        product.counter--
+        if (selectedProducts.contains(product) && product.counter <= 0)
+            selectedProducts.remove(product)
+    }
+
+    fun getSelectedProductsCount(): String {
+        var count = 0
+        selectedProducts.forEach {
+            count += it.counter
+        }
+        return count.toString()
     }
 
 

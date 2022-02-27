@@ -36,25 +36,6 @@ class CategoryAdapter(private val onClickCategory: (Int) -> Unit) :
         holder.bind(item)
     }
 
-    override fun onBindViewHolder(
-        holder: CategoryViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-        if (payloads.isNotEmpty()) {
-            when (payloads[0]) {
-                2 -> {
-                    currentList[position].isCurrent = false
-                }
-            }
-        }
-        super.onBindViewHolder(holder, position, payloads)
-    }
-
-    override fun getItemCount(): Int {
-        return currentList.size
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     fun selectItem(pos: Int) {
         if (selectedItemPos != -1)

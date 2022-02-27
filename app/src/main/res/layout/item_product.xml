@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp">
+    android:baselineAligned="false">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
@@ -19,7 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:textColor="#303030"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/font_color"
             android:textSize="14sp"
             tools:text="Pizza Margarita" />
 
@@ -28,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto"
             android:textColor="#707070"
             android:textSize="12sp"
             tools:text="Любая маленькая пицца на выбор, порция фри и Coca Cola" />
@@ -36,6 +39,7 @@
             android:id="@+id/text_view_product_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
             android:textColor="@color/blue"
             android:textSize="14sp"
             tools:text="1600 tg" />
@@ -45,52 +49,85 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/image_view_product"
-            android:layout_width="120dp"
-            android:layout_height="90dp"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/ic_launcher_background" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="4dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:cornerRadius="8dp">
+            <ImageView
+                android:id="@+id/image_view_product"
+                android:layout_width="150dp"
+                android:layout_height="120dp"
+                android:contentDescription="@string/product_image_con"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/avatars" />
 
-            <LinearLayout
-                android:id="@+id/cart_container"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/change_buttons_card_view"
                 android:layout_width="wrap_content"
-                android:visibility="gone"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="5dp">
 
-                <View
-                    android:id="@+id/button_minus"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:foreground="@drawable/ic_baseline_minus_12"
-                    android:foregroundGravity="center" />
-
-                <TextView
-                    android:id="@+id/text_view_product_count"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
-                    android:textColor="#131113"
-                    android:textSize="16sp"
-                    tools:text="1" />
-            </LinearLayout>
+                    android:layout_height="36dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            <View
-                android:id="@+id/button_plus"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:foreground="@drawable/ic_baseline_add_12"
-                android:foregroundGravity="center" />
-        </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/cart_container"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/button_minus"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:backgroundTint="@color/white"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:text="@string/minus"
+                            android:textColor="#2997FF"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/text_view_product_count"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="1dp"
+                            android:gravity="center"
+                            android:text="@string/zero"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/button_plus"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:text="@string/plus"
+                        android:textColor="#2997FF"
+                        android:textSize="20sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
     </FrameLayout>
 </LinearLayout>

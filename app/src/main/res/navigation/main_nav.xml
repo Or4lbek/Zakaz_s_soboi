@@ -9,10 +9,14 @@
         android:id="@+id/homeFragment"
         android:name="kz.example.zakazssoboi.presentation.ui.fragment.HomeFragment"
         android:label="@string/order_with_u"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_restaurantDetailFragment"
-            app:destination="@id/restaurantDetailFragment" />
+            app:destination="@id/restaurantDetailFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
     </fragment>
     <fragment
         android:id="@+id/restaurantDetailFragment"
@@ -27,11 +31,25 @@
             app:argType="string" />
         <action
             android:id="@+id/action_restaurantDetailFragment_to_basketFragment"
-            app:destination="@id/basketFragment" />
+            app:destination="@id/basketFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
     </fragment>
     <fragment
         android:id="@+id/basketFragment"
         android:name="kz.example.zakazssoboi.presentation.ui.fragment.BasketFragment"
-        android:label="@String/basket"
-        tools:layout="@layout/fragment_basket" />
+        android:label="@string/basket"
+        tools:layout="@layout/fragment_basket">
+        <argument
+            android:name="products"
+            app:argType="kz.example.zakazssoboi.domain.entity.Product[]" />
+        <argument
+            android:name="restaurantName"
+            app:argType="string" />
+        <argument
+            android:name="restaurantAddress"
+            app:argType="string" />
+    </fragment>
 </navigation>

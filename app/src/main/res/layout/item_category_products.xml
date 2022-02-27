@@ -10,7 +10,8 @@
         android:id="@+id/text_view_category_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/font_color"
         android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Pizza" />

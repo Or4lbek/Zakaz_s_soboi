@@ -3,10 +3,10 @@ package kz.example.zakazssoboi.presentation.ui.fragment
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -43,10 +43,15 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
     }
 
     private fun init() {
-        binding.buttonBurger.setOnClickListener { onClickBtnBurger() }
-        binding.buttonBasket.setOnClickListener { onClickBtnBasket() }
-        val args: RestaurantDetailFragmentArgs by navArgs()
-        val restaurantId = args.id
+        binding.apply {
+            buttonBurger.setOnClickListener { onClickBtnBurger() }
+            buttonBasket.setOnClickListener { onClickBtnBasket() }
+            textViewRestaurantAddress.text = viewModel.restaurantAddress
+        }
+//        val args: RestaurantDetailFragmentArgs by navArgs()
+//        val restaurantId = args.id
+//        restaurantName = args.restaurantName
+        updateButtonData()
     }
 
     private fun initViewPager() {
@@ -56,9 +61,7 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
     }
 
     private fun FragmentRestaurantDetailBinding.initUI() {
-        categoryAdapter = CategoryAdapter {
-            onClickCategory(it)
-        }
+        categoryAdapter = CategoryAdapter(::onClickCategory)
         recyclerViewCategory.adapter = categoryAdapter
         recyclerViewMenu.adapter = parentMenuAdapter
 
@@ -68,6 +71,7 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
 
     var categoryScrollingPos = 0
     var isCategoryScrolling = false
+
     private fun onClickCategory(pos: Int) {
         categoryScrollingPos = pos
         isCategoryScrolling = true
@@ -89,7 +93,6 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
         layoutManager?.startSmoothScroll(smoothScroller)
     }
 
-
     private fun onClickBtnBurger() {
         val bottomSheetMenuFragment = BottomSheetMenuFragment(
             { onClickMenuItem(it) },
@@ -104,7 +107,11 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
 
     private fun onClickBtnBasket() {
         val action =
-            RestaurantDetailFragmentDirections.actionRestaurantDetailFragmentToBasketFragment()
+            RestaurantDetailFragmentDirections.actionRestaurantDetailFragmentToBasketFragment(
+                viewModel.selectedProducts.toTypedArray(),
+                viewModel.restaurantName,
+                viewModel.restaurantAddress
+            )
         findNavController().navigate(action)
     }
 
@@ -134,30 +141,32 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
                     isCategoryScrolling = false
                 }
                 if (!isCategoryScrolling) {
-                    categoryAdapter.selectItem(posFirst)
-                    binding.recyclerViewCategory.scrollToPosition(posFirst)
+                    if (categoryAdapter.itemCount - 1 == menuLayoutManager.findLastVisibleItemPosition()) {
+                        categoryAdapter.selectItem(categoryAdapter.itemCount - 1)
+                        binding.recyclerViewCategory.scrollToPosition(categoryAdapter.itemCount - 1)
+                    } else {
+                        categoryAdapter.selectItem(posFirst)
+                        binding.recyclerViewCategory.scrollToPosition(posFirst)
+                    }
                 }
             }
         })
     }
 
     override fun onClickPlus(product: Product) = with(binding) {
-        viewModel.totalPrice += product.price
-
-        if (viewModel.totalPrice > 0) {
-
-            buttonBasket.visibility = View.VISIBLE
-            buttonBasket.text = viewModel.totalPrice.toString()
-        }
+        viewModel.addProduct(product)
+        updateButtonData()
     }
 
     override fun onClickMinus(product: Product) = with(binding) {
-        viewModel.totalPrice -= product.price
+        viewModel.removeProduct(product)
+        updateButtonData()
+    }
 
-        if (viewModel.totalPrice <= 0) {
-            buttonBasket.visibility = View.GONE
-            buttonBasket.text = viewModel.totalPrice.toString()
-        }
+    private fun updateButtonData() = with(binding) {
+        textViewProductListCount.text = viewModel.getSelectedProductsCount()
+        textViewProductListTotalPrice.text = viewModel.totalPrice.toString()
+        buttonBasket.isVisible = viewModel.totalPrice > 0
     }
 
     override fun onDestroyView() {
