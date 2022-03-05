@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kz.example.zakazssoboi.common.MarginItemDecoration
 import kz.example.zakazssoboi.databinding.ItemCategoryProductsBinding
-import kz.example.zakazssoboi.domain.entity.CategoryProduct
-import kz.example.zakazssoboi.presentation.ui.diff_callback.CategoryProductDiffCallback
+import kz.example.zakazssoboi.domain.entity.Category
+import kz.example.zakazssoboi.presentation.ui.diff_callback.CategoryDiffCallback
 
 
 class ParentMenuAdapter(private val listener: ChildMenuAdapter.ChildMenuAdapterListener) :
-    ListAdapter<CategoryProduct, ParentMenuAdapter.CategoryContainerViewHolder>(
-        CategoryProductDiffCallback()
+    ListAdapter<Category, ParentMenuAdapter.CategoryContainerViewHolder>(
+        CategoryDiffCallback()
     ) {
 
     inner class CategoryContainerViewHolder(private val binding: ItemCategoryProductsBinding) :
@@ -28,11 +28,11 @@ class ParentMenuAdapter(private val listener: ChildMenuAdapter.ChildMenuAdapterL
             )
         }
 
-        fun bind(item: CategoryProduct) = with(binding) {
-            textViewCategoryName.text = item.category
+        fun bind(item: Category) = with(binding) {
+            textViewCategoryName.text = item.name
             recyclerViewProducts.isNestedScrollingEnabled = false
             recyclerViewProducts.adapter = ChildMenuAdapter(listener).apply {
-                submitList(item.products)
+                submitList(item.productList)
             }
         }
     }

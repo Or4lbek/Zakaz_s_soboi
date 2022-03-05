@@ -5,16 +5,17 @@ import android.util.DisplayMetrics
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import kz.example.zakazssoboi.R
 import kz.example.zakazssoboi.common.Constants.BOTTOM_SHEET_FRAGMENT
+import kz.example.zakazssoboi.data.network.dto.restaurantDto.toRestaurantDetails
 import kz.example.zakazssoboi.databinding.FragmentRestaurantDetailBinding
-import kz.example.zakazssoboi.domain.entity.Category
 import kz.example.zakazssoboi.domain.entity.Product
+import kz.example.zakazssoboi.domain.entity.RestaurantDetails
 import kz.example.zakazssoboi.presentation.ui.adapter.CategoryAdapter
 import kz.example.zakazssoboi.presentation.ui.adapter.ChildMenuAdapter
 import kz.example.zakazssoboi.presentation.ui.adapter.ParentMenuAdapter
@@ -27,46 +28,57 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
     private var _binding: FragmentRestaurantDetailBinding? = null
     private val binding get() = _binding!!
     private val parentMenuAdapter: ParentMenuAdapter = ParentMenuAdapter(this)
+    private val viewPagerRestaurantAdapter = ViewPagerRestaurantAdapter()
 
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var menuLayoutManager: LinearLayoutManager
-    private lateinit var viewModel: RestaurantDetailViewModel
+    private val viewModel: RestaurantDetailViewModel by viewModels()
+    private lateinit var restaurant: RestaurantDetails
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRestaurantDetailBinding.bind(view)
-        viewModel = ViewModelProvider(this)[RestaurantDetailViewModel::class.java]
-        init()
-        initViewPager()
         binding.initUI()
         setObserver()
-    }
-
-    private fun init() {
-        binding.apply {
-            buttonBurger.setOnClickListener { onClickBtnBurger() }
-            buttonBasket.setOnClickListener { onClickBtnBasket() }
-            textViewRestaurantAddress.text = viewModel.restaurantAddress
-        }
-//        val args: RestaurantDetailFragmentArgs by navArgs()
-//        val restaurantId = args.id
-//        restaurantName = args.restaurantName
-        updateButtonData()
-    }
-
-    private fun initViewPager() {
-        val viewPagerRestaurantAdapter = ViewPagerRestaurantAdapter()
-        viewPagerRestaurantAdapter.submitList(viewModel.viewPagerImages)
-        binding.viewPagerRestaurantImages.adapter = viewPagerRestaurantAdapter
     }
 
     private fun FragmentRestaurantDetailBinding.initUI() {
         categoryAdapter = CategoryAdapter(::onClickCategory)
         recyclerViewCategory.adapter = categoryAdapter
         recyclerViewMenu.adapter = parentMenuAdapter
+        viewPagerRestaurantImages.adapter = viewPagerRestaurantAdapter
 
         menuLayoutManager = LinearLayoutManager(requireContext())
         recyclerViewMenu.layoutManager = menuLayoutManager
+
+        buttonBurger.setOnClickListener { onClickBtnBurger() }
+        buttonBasket.setOnClickListener { onClickBtnBasket() }
+        updateButtonData()
+    }
+
+    private fun setObserver() = with(viewModel) {
+        binding.progressBarMenu.visibility = View.VISIBLE
+        liveDataViewPagerImages.observe(viewLifecycleOwner) {
+            binding.progressBarMenu.visibility = View.GONE
+            if (viewPagerRestaurantAdapter.currentList.isEmpty()) {
+                viewPagerRestaurantAdapter.submitList(it)
+            }
+
+        }
+
+        liveDataCategoriesList.observe(viewLifecycleOwner) {
+            if (parentMenuAdapter.currentList.isEmpty()) {
+                parentMenuAdapter.submitList(it)
+            }
+            if (categoryAdapter.currentList.isEmpty()) {
+                categoryAdapter.submitList(it)
+            }
+        }
+        scrollListener()
+
+        liveDataRestaurant.observe(viewLifecycleOwner) {
+            restaurant = it.toRestaurantDetails()
+        }
     }
 
     var categoryScrollingPos = 0
@@ -109,26 +121,10 @@ class RestaurantDetailFragment : Fragment(R.layout.fragment_restaurant_detail),
         val action =
             RestaurantDetailFragmentDirections.actionRestaurantDetailFragmentToBasketFragment(
                 viewModel.selectedProducts.toTypedArray(),
-                viewModel.restaurantName,
-                viewModel.restaurantAddress
+                restaurant.name,
+                restaurant.address
             )
         findNavController().navigate(action)
-    }
-
-    private fun setObserver() {
-        viewModel.liveData.observe(viewLifecycleOwner) { result ->
-            val category = result.map { categoryProduct ->
-                Category(
-                    categoryProduct.id,
-                    categoryProduct.category,
-                    categoryProduct.products,
-                    false
-                )
-            }
-            categoryAdapter.submitList(category)
-            parentMenuAdapter.submitList(result)
-            scrollListener()
-        }
     }
 
     private fun scrollListener() {

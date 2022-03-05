@@ -1,33 +1,55 @@
 package kz.example.zakazssoboi.presentation.view_model
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import kz.example.zakazssoboi.common.Constants.PIZZA_URL
-import kz.example.zakazssoboi.domain.entity.CategoryProduct
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kz.example.zakazssoboi.data.network.dto.restaurantDto.RestaurantDetailsDto
+import kz.example.zakazssoboi.data.network.dto.restaurantDto.toCategory
+import kz.example.zakazssoboi.data.network.worst_code.RetroInstance
+import kz.example.zakazssoboi.data.network.worst_code.RetroServiceInterface
+import kz.example.zakazssoboi.domain.entity.Category
 import kz.example.zakazssoboi.domain.entity.Product
 
-class RestaurantDetailViewModel() : ViewModel() {
+class RestaurantDetailViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
+    private var liveDataRestaurantMutable: MutableLiveData<RestaurantDetailsDto> = MutableLiveData()
+    private var liveDataViewPagerImagesMutable: MutableLiveData<List<String>> = MutableLiveData()
+    private var liveDataCategoriesListMutable: MutableLiveData<List<Category>> = MutableLiveData()
 
-    var viewPagerImages: ArrayList<String> = ArrayList()
-    val liveData: MutableLiveData<List<CategoryProduct>> = MutableLiveData()
+    val liveDataCategoriesList: LiveData<List<Category>> = liveDataCategoriesListMutable
+    val liveDataViewPagerImages: LiveData<List<String>> = liveDataViewPagerImagesMutable
+    val liveDataRestaurant: LiveData<RestaurantDetailsDto> = liveDataRestaurantMutable
+
+    val id: Int = savedStateHandle["id"] ?: 1
     val selectedProducts: ArrayList<Product> = ArrayList()
-    val restaurantAddress = "ул. Панфилова 109"
-    val restaurantName = "Mamma mia"
+
     var totalPrice = 0
 
+
     init {
-        fetchAllCategories()
-        viewPagerImages.apply {
-            add("https://media-cdn.tripadvisor.com/media/photo-s/13/c5/15/2f/interiors.jpg")
-            add("https://restolife.kz/upload/information_system_6/2/1/4/item_21447/information_items_property_24075.jpg")
-            add("https://media-cdn.tripadvisor.com/media/photo-s/0a/58/db/09/mamma-mia.jpg")
-            add("https://www.localguidesconnect.com/t5/image/serverpage/image-id/609103i935F61DE5BBBEA81?v=v2")
-            add("https://media-cdn.tripadvisor.com/media/photo-s/1a/d2/f1/bd/kfc.jpg")
-            add("https://media-cdn.tripadvisor.com/media/photo-s/13/c5/15/2f/interiors.jpg")
+        fetchMenuApi()
+    }
+
+    private fun fetchMenuApi() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val retroInstance = RetroInstance.getRetrofitInstance()
+            val retroService = retroInstance.create(RetroServiceInterface::class.java)
+            val call = retroService.getMenuById(id)
+            liveDataRestaurantMutable.postValue(call)
+            init()
         }
+    }
+
+    private fun init() {
+        val categoryList = fromRestaurantDetailsDtoToCategory(
+            liveDataRestaurantMutable.value
+        )
+        liveDataCategoriesListMutable.postValue(
+            categoryList
+        )
+        liveDataViewPagerImagesMutable.postValue(fromMenuDTOtoImages(liveDataRestaurantMutable.value))
 
     }
+
 
     fun addProduct(product: Product) {
         totalPrice += product.price
@@ -51,172 +73,19 @@ class RestaurantDetailViewModel() : ViewModel() {
         return count.toString()
     }
 
+    private fun fromRestaurantDetailsDtoToCategory(restaurantDtoList: RestaurantDetailsDto?): List<Category> {
+        val categoryList: ArrayList<Category> = ArrayList()
+        restaurantDtoList?.data?.productCategories?.map {
+            categoryList.add(it.toCategory())
+        }
+        return categoryList
+    }
 
-    private fun fetchAllCategories() {
-        val meals1 = Product(
-            id = 1,
-            name = "Маргаритта",
-            image = PIZZA_URL,
-            price = 1700,
-            description = "23456"
-        )
-
-        val meals2 = Product(
-            id = 2,
-            name = "Маргаритта",
-            image = PIZZA_URL,
-            price = 1700,
-            description = "23456"
-        )
-        val meals3 = Product(
-            id = 3,
-            name = "Маргаритта3",
-            image = PIZZA_URL,
-            price = 1800,
-            description = "23456"
-        )
-        val categoryPizza = CategoryProduct(
-            1,
-            category = "Пицца",
-            products = listOf(
-                meals1,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3
-            )
-        )
-        val categoryDrinks = CategoryProduct(
-            2,
-            category = "Напитки",
-            products = listOf(
-                meals1,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3
-            )
-        )
-        val categoryFruits = CategoryProduct(
-            3,
-            category = "Фрукты",
-            products = listOf(
-                meals1,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3
-            )
-        )
-        val categoryFruits1 = CategoryProduct(
-            3,
-            category = "Фрукты1",
-            products = listOf(
-                meals1,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3
-            )
-        )
-        val categoryFruits12 = CategoryProduct(
-            3,
-            category = "Фрукты12",
-            products = listOf(
-                meals1,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3
-            )
-        )
-        val categoryFruits13 = CategoryProduct(
-            3,
-            category = "Фрукты13",
-            products = listOf(
-                meals1,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3
-            )
-        )
-        val categoryFruits14 = CategoryProduct(
-            3,
-            category = "Фрукты14",
-            products = listOf(
-                meals1,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3,
-                meals2,
-                meals3
-            )
-        )
-        val categoryFruits15 = CategoryProduct(
-            3,
-            category = "Фрукты15",
-            products = listOf(
-                meals1
-            )
-        )
-
-        liveData.postValue(
-            listOf(
-                categoryPizza,
-                categoryFruits,
-                categoryDrinks,
-                categoryFruits1,
-                categoryFruits12,
-                categoryFruits13,
-                categoryFruits14,
-                categoryFruits15
-            )
-        )
+    private fun fromMenuDTOtoImages(restaurantDtoList: RestaurantDetailsDto?): List<String> {
+        val imageList: ArrayList<String> = ArrayList()
+        restaurantDtoList?.data?.restaurantImages?.map {
+            imageList.add(it.url)
+        }
+        return imageList.toList()
     }
 }

@@ -2,8 +2,10 @@ package kz.example.zakazssoboi.presentation.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import kz.example.zakazssoboi.R
 import kz.example.zakazssoboi.databinding.FragmentHomeBinding
@@ -17,31 +19,34 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
 
     private lateinit var restaurantListAdapter: RestaurantsListAdapter
-    private lateinit var viewModel: RestaurantListViewModel
+    private val viewModel: RestaurantListViewModel by viewModels()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[RestaurantListViewModel::class.java]
         _binding = FragmentHomeBinding.bind(view)
-
-        initRecyclerView()
-        initViewModel()
+        init()
+        setObserver()
     }
 
-    private fun initRecyclerView() {
-        restaurantListAdapter = RestaurantsListAdapter {
-            onNoteClick(it)
-        }
-        binding.recyclerViewRestaurants.adapter = restaurantListAdapter
-
-        if (restaurantListAdapter.currentList.isEmpty()) {
-            binding.progressBarHome.visibility = View.VISIBLE
-        }
+    private fun init() = with(binding) {
+        restaurantListAdapter = RestaurantsListAdapter(::onNoteClick)
+        recyclerViewRestaurants.adapter = restaurantListAdapter
+        progressBarHome.isVisible = restaurantListAdapter.currentList.isEmpty()
     }
 
-    private fun initViewModel() {
-        binding.progressBarHome.visibility = View.GONE
-        restaurantListAdapter.submitList(viewModel.restaurantList)
+    private fun setObserver() = with(viewModel) {
+        liveDataRestaurantList.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.progressBarHome.visibility = View.GONE
+                if (restaurantListAdapter.currentList.isEmpty()) {
+                    restaurantListAdapter.submitList(it)
+                }
+            } else {
+                Toast.makeText(requireContext(), "Error in getting list...", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 
     private fun onNoteClick(restaurant: Restaurant) {

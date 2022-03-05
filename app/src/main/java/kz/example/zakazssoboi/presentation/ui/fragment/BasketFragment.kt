@@ -3,7 +3,7 @@ package kz.example.zakazssoboi.presentation.ui.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import kz.example.zakazssoboi.R
 import kz.example.zakazssoboi.common.MarginItemDecoration
@@ -15,17 +15,14 @@ import kz.example.zakazssoboi.presentation.view_model.BasketViewModel
 class BasketFragment : Fragment(R.layout.fragment_basket),
     ChildMenuAdapter.ChildMenuAdapterListener {
 
-
     private var _binding: FragmentBasketBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: BasketViewModel
+    private val viewModel: BasketViewModel by viewModels()
     private var basketsMenuAdapter: ChildMenuAdapter = ChildMenuAdapter(this)
-    private var testItems: ArrayList<Product> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentBasketBinding.bind(view)
-        viewModel = ViewModelProvider(this)[BasketViewModel::class.java]
         init()
     }
 

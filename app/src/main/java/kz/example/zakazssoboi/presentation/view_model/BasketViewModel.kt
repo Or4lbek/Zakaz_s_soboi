@@ -6,9 +6,9 @@ import kz.example.zakazssoboi.domain.entity.Product
 
 class BasketViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    val products: Array<Product> = savedStateHandle.get("products") ?: arrayOf()
-    val restaurantName = savedStateHandle.get("restaurantName") ?: ""
-    val restaurantAddress = savedStateHandle.get("restaurantAddress") ?: ""
+    val products: Array<Product> = savedStateHandle["products"] ?: arrayOf()
+    val restaurantName = savedStateHandle["restaurantName"] ?: ""
+    val restaurantAddress = savedStateHandle["restaurantAddress"] ?: ""
     private var selectedProducts: ArrayList<Product> = products.toCollection(ArrayList())
 
     var totalPrice = 0
